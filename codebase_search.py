@@ -19,7 +19,7 @@ Example:
     python codebase_search.py "search_pattern" /path/to/codebase --extensions py,txt --context 2
 """
 
-from .utils.cli import run_cli
+from utils.cli import run_cli
 
 if __name__ == "__main__":
     run_cli()

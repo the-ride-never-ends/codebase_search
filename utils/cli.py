@@ -5,11 +5,9 @@ Command line interface module for codebase search utility.
 This module provides the command line interface for the codebase search
 utility, including argument parsing and the main entry point.
 """
-
-import os
-import sys
 import argparse
 from pathlib import Path
+import sys
 from typing import List, Optional
 
 from utils.traversal import FileTraverser
@@ -34,10 +32,13 @@ def parse_arguments(args: Optional[List[str]] = None) -> argparse.Namespace:
     # Required arguments
     parser.add_argument(
         "pattern",
+        required=True,
         help="The pattern to search for"
     )
     parser.add_argument(
         "path",
+        required=True,
+        type=str,
         help="The path to search in"
     )
     
@@ -51,21 +52,21 @@ def parse_arguments(args: Optional[List[str]] = None) -> argparse.Namespace:
     search_options.add_argument(
         "--whole-word", "-w",
         action="store_true",
-        help="Match whole words only"
+        help="Match whole words only (default: True) (type: bool)"
     )
     search_options.add_argument(
         "--regex", "-r",
         action="store_true",
-        help="Interpret pattern as a regular expression"
+        help="Interpret pattern as a regular expression (default: True) (type: bool)"
     )
     search_options.add_argument(
         "--extensions", "-e",
-        help="Comma-separated list of file extensions to search (e.g., 'py,txt')",
+        help="Comma-separated list of file extensions to search (e.g., 'py,txt') (type: list[str])",
         type=lambda s: s.split(',') if s else None
     )
     search_options.add_argument(
         "--exclude", "-x",
-        help="Comma-separated list of glob patterns to exclude (e.g., '*.git*,*node_modules*')",
+        help="Comma-separated list of glob patterns to exclude (e.g., '*.git*,*node_modules*') (type: list[str])",
         type=lambda s: s.split(',') if s else None
     )
     search_options.add_argument(
@@ -77,7 +78,7 @@ def parse_arguments(args: Optional[List[str]] = None) -> argparse.Namespace:
         "--context", "-c",
         type=int,
         default=0,
-        help="Number of lines of context to include before and after matches"
+        help="Number of lines of context to include before and after matches (default: 0) (type: int)"
     )
     
     # Output options
@@ -86,26 +87,26 @@ def parse_arguments(args: Optional[List[str]] = None) -> argparse.Namespace:
         "--format", "-f",
         choices=["text", "json"],
         default="text",
-        help="Output format (default: text)"
+        help="Output format (default: text) (type: str)"
     )
     output_options.add_argument(
         "--output", "-o",
-        help="Write output to file instead of stdout"
+        help="Write output to a file instead of stdout (type: Optional[str])",
     )
     output_options.add_argument(
         "--compact",
         action="store_true",
-        help="Use compact output format (one line per match)"
+        help="Use compact output format (one line per match) (default: True) (type: bool)"
     )
     output_options.add_argument(
         "--group-by-file", "-g",
         action="store_true",
-        help="Group results by file"
+        help="Group results by file (default: True) (type: bool)"
     )
     output_options.add_argument(
         "--summary", "-s",
         action="store_true",
-        help="Include summary information in output"
+        help="Include summary information in output (default: True) (type: bool)"
     )
     
     # Parse arguments
